@@ -2,22 +2,28 @@
 
 <?php
 
+	function sanitize_input( $input_string ) {
+		$input_string = strip_tags( $input_string );
+		$input_string = mysql_real_escape_string( $input_string );
+		return $input_string;
+	}
+
 	session_start();
 	$db = mysqli_connect( "localhost", "root", "password", "loretta" );
 
-	if ( !$db ) {
+	if( !$db ) {
 		echo mysqli_connect_error();
 		return;
 	}
 
-	if(isset($_POST['submit'])) {
-		if($_POST['name'] == "") {
+	if( isset( $_POST['submit'] ) ) {
+		if( $_POST['name'] == "" ) {
 			echo 'Please Enter Name';
 			#echo '<br><a href="index.php?a=login">Back</a>';
 			return;
 		}
 		
-		if($_POST['password'] == "") {
+		if( $_POST['password'] == "" ) {
 			echo 'Please Enter Password';
 			#echo '<br><a href="index.php?a=login">Back</a>';
 			return;
@@ -26,9 +32,12 @@
 		$name = $_POST['name'];
 		$password = $_POST['password'];
 
+		$name = sanitize_input($name);
+		$password = sanitize_input($password);
+
 		$qstring = "SELECT name, password, id FROM users WHERE name='$name'"; 
-		$qresult = mysqli_query($db, $qstring);
-		$row = mysqli_fetch_object($qresult);
+		$qresult = mysqli_query( $db, $qstring );
+		$row = mysqli_fetch_object( $qresult );
 		
 		#TODO: hash!! & Passwordcheck in general & check if name was correct
 		#if($row->password != $password){#hash("sha512", $password)){        #implement later instead of $password
@@ -41,7 +50,7 @@
 		$_SESSION["logged_in"] = 1;
 		$_SESSION["userid"] = $row->id;
 		
-		include("admin.php");
+		include( "admin.php" );
 	} else {
 		echo '<form action="index.php" method="post">';
 		echo '<p>Name:<br><input name="name"></p>';
