@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 	
-	<h> "You are at the admin page now. You can add or edit things in the database here, add admins or change your password" </h>
+	<h> "You are at the admin page now. You can add or edit things in the database here, add admins or change your password." </h>
 	<body>
 		<form action="edit_DB.php" method="post">
 			<input id="edit_DB" name=submit type=submit value="edit_DB">
